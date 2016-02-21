@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "list.h"
 
 struct Node* create_node(int val) {
@@ -7,25 +9,39 @@ struct Node* create_node(int val) {
   return n;
 }
 
+/* insert a new element into the list in-order. Return the new head of the list. */
 struct Node* insert_ordered(struct Node* head, int val) {
-  struct Node* new = create_node(val);
+  struct Node* new = create_node(val),
+    *prev = NULL,
+    *cur = head;
 
-  while(val < head->val) {
-    head = head->next;
-    if(head == NULL) break;
+  while(val > cur->val) {
+    prev = cur;
+    cur = cur->next;
+    if(cur == NULL) break;
   }
 
-  new->next = head->next;
-  head->next = new->next;
-
-  return new;
+  new->next = cur;
+  if(prev) {
+    prev->next = new;
+    return head;
+  } else {
+    return new;
+  }
 }
 
-/* returns 0 if the list is ordered */
+/* returns 1 if the list is ordered */
 int is_ordered(struct Node* head) {
   for(struct Node* cur = head; cur != NULL; cur = cur->next) {
-    if(head->next && head->val > head->next->val)
-      return 1;
+    if(cur->next && cur->val > cur->next->val)
+      return 0;
   }
-  return 0;
+  return 1;
+}
+
+void print_list(struct Node* head) {
+  for(struct Node* cur = head; cur != NULL; cur = cur->next) {
+    printf("%d ", cur->val);
+  }
+  printf("\n");
 }
