@@ -2,7 +2,7 @@ check: test
 	./test
 
 test: test.o list.o
-	cc -o $@ $^
+	cc -std=gnu99 -o $@ $^
 
 clean:
 	rm *.o
